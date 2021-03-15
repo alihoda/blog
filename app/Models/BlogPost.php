@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlogPost extends Model
 {
+    use HasFactory;
+    
     protected $fillable = ['title', 'description'];
 
     public function comment()

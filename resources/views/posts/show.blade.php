@@ -13,6 +13,13 @@
         <strong>New!</strong>
     @endif
 
+    <h4>Comments</h4>
+    @forelse ($post->comment as $comment)
+        <p>{{ $comment->content }}, added {{ $comment->created_at->diffForHumans() }}</p>    
+    @empty
+        <p>No comment yet!</p>
+    @endforelse
+    <hr>
     <a href="{{ route('posts.edit', ['post' => $post]) }}">Edit the Post</a>
     <br><br>
     <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">

@@ -6,29 +6,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\BlogPost;
+use App\Models\Comment;
 
 
 class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function createDummyPost(): BlogPost
-    {
-        $post = new BlogPost();
-        $post->title = "test title";
-        $post->description = "test desc";
-        $post->save();
-
-        return $post;
-    }
-
     public function test_createPost()
     {
-        $post = $this->createDummyPost();
+        $post = BlogPost::factory()->create();
 
         $response = $this->get('/posts');
-        $response->assertSeeText('test title');
-        $this->assertDatabaseHas('blog_posts', ['title' => 'test title']);
+        $response->assertSeeText($post->title);
+        $this->assertDatabaseHas('blog_posts', ['title' => $post->title]);
     }
 
     public function test_store()
@@ -57,7 +48,7 @@ class PostTest extends TestCase
 
     public function test_update()
     {
-        $post = $this->createDummyPost();
+        $post = BlogPost::factory()->create();
 
         $params = ['title' => 'edited title', 'description' => 'edited desc'];
 
@@ -71,12 +62,21 @@ class PostTest extends TestCase
 
     public function test_delete()
     {
-        $post = $this->createDummyPost();
+        $post = BlogPost::factory()->create();
 
         $this->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
             $this->assertEquals(session('status'), 'Post successfully deleted!!');
             $this->assertDatabaseMissing('blog_posts', $post->toArray());
+    }
+
+    public function test_comment()
+    {
+        $post = BlogPost::factory()
+            ->has(Comment::factory()->count(5))
+            ->create();
+        $response = $this->get('/posts');
+        $response->assertSeeText('5 comments');
     }
 }

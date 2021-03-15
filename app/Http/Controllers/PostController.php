@@ -11,7 +11,7 @@ class PostController extends Controller
     
     public function index()
     {
-        return view('posts.index', ['posts' => BlogPost::all()]);
+        return view('posts.index', ['posts' => BlogPost::withCount('comment')->get()]);
     }
 
     public function create()
@@ -32,7 +32,7 @@ class PostController extends Controller
 
     public function show($id)
     {
-        return view('posts.show', ['post' => BlogPost::findOrFail($id)]);
+        return view('posts.show', ['post' => BlogPost::with('comment')->findOrFail($id)]);
     }
 
     public function edit($id)
