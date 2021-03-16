@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/contact', 'HomeController@contact')->name('contact');
 
-Route::resource('/posts', 'PostController')->middleware('auth');
+Route::resource('/posts', 'PostController');
 
 Auth::routes();
 
