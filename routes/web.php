@@ -13,8 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@home')->name('home');
+// Route::get('/', 'HomeController@home')->name('home');
 
 Route::get('/contact', 'HomeController@contact')->name('contact');
 
-Route::resource('/posts', 'PostController');
+Route::resource('/posts', 'PostController')->middleware('auth');
+
+Auth::routes();
+
+Route::get('/', 'HomeController@index')->name('home');

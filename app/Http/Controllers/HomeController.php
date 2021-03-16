@@ -3,26 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\BlogPost;
 
 class HomeController extends Controller
 {
-    public function home(){
-        return view('home');
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 
-    public function contact(){
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
+        return view('home', ['posts' => BlogPost::withCount('comment')->get()]);
+    }
+
+    public function contact()
+    {
         return view('contact');
-    }
-
-    public function blogPost($id){
-        $pages = [
-            1 => [
-                'title' => 'Hello from page 1',
-            ],
-            2 => [
-                'title' => 'Hello from page 2',
-            ],
-        ];
-        return view('blog-post', ['data' => $pages[$id]]);
     }
 }

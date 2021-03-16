@@ -1,14 +1,25 @@
-@extends('layout')
+@extends('layouts.app')
 
 @section('title')
     Create
 @endsection
 
 @section('content')
-    <br>
-    <form action="{{ route('posts.store') }}" method="post">
-        @csrf
-        @include('posts._form')
-        <button type="submit">Create</button>
-    </form>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Create Post</a></div>
+                    
+                    <div class="card-body">
+                        <form action="{{ route('posts.store') }}" method="post">
+                            @csrf
+                            @include('posts._form')
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

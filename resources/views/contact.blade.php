@@ -1,9 +1,13 @@
-@extends('layout')
+@extends('layouts.app')
 
 @section('title')
     Contact
 @endsection
 
 @section('content')
-    <h1>Contact</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <h1>Contact</h1>
+    </div>
+</div>
 @endsection
