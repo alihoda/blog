@@ -11,7 +11,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4>{{ $post->title }}</h4>
-                    <span class="card-subtitle text-muted">Added {{ $post->created_at->diffForHumans() }}</span>
+                    <span class="card-subtitle text-muted">Added {{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</span>
                 </div>
                 <div class="card-body">
                     <p>{{ $post->description }}</p>

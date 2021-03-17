@@ -14,12 +14,15 @@
                     <div class="card-body">
                         <p>{{ $post->description }}</p>
                     </div>
-                    <div class="card-footer">
-                        @if ($post->comment_count)
-                            <p class="text-muted">{{ $post->comment_count }} comments</p>
-                        @else
-                            <p class="text-muted">No comments yet!</p>
-                        @endif
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <span class="card-subtitle text-muted">
+                            @if ($post->comment_count)
+                                {{ $post->comment_count }} comments
+                            @else
+                                No comments yet!
+                            @endif
+                        </span>
+                        <span class="card-subtitle text-muted">{{ $post->user->name }}</span>
                     </div>
 
                 </div>
