@@ -17,7 +17,7 @@ class PostTest extends TestCase
     {
         $post = BlogPost::factory()->create();
 
-        $response = $this->get('/posts');
+        $response = $this->actingAs($this->user())->get('/posts');
         $response->assertSeeText($post->title);
         $this->assertDatabaseHas('blog_posts', ['title' => $post->title]);
     }
@@ -26,7 +26,8 @@ class PostTest extends TestCase
     {
         $params = ['title' => 'valid title', 'description' => 'valid description'];
 
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
         $this->assertEquals(session('status'), 'Post successfully created !!');
@@ -36,7 +37,8 @@ class PostTest extends TestCase
     {
         $params = ['title' => 'v', 'description' => ''];
 
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
         
@@ -52,7 +54,8 @@ class PostTest extends TestCase
 
         $params = ['title' => 'edited title', 'description' => 'edited desc'];
 
-        $this->put("/posts/{$post->id}", $params)
+        $this->actingAs($this->user())
+            ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
         $this->assertEquals(session('status'), 'Post successfully updated!!');
@@ -64,7 +67,8 @@ class PostTest extends TestCase
     {
         $post = BlogPost::factory()->create();
 
-        $this->delete("/posts/{$post->id}")
+        $this->actingAs($this->user())
+            ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
             $this->assertEquals(session('status'), 'Post successfully deleted!!');
@@ -76,7 +80,7 @@ class PostTest extends TestCase
         $post = BlogPost::factory()
             ->has(Comment::factory()->count(5))
             ->create();
-        $response = $this->get('/posts');
+        $response = $this->actingAs($this->user())->get('/posts');
         $response->assertSeeText('5 comments');
     }
 }

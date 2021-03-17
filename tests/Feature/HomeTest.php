@@ -9,6 +9,7 @@ use Tests\TestCase;
 
 class HomeTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -16,9 +17,8 @@ class HomeTest extends TestCase
      */
     public function test_homePage()
     {
-        $response = $this->get('/');
+        $response = $this->actingAs($this->user())->get('/');
 
         $response->assertStatus(200);
-        $response->assertSeeText('Home');
     }
 }
