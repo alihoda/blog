@@ -17,7 +17,7 @@ class AddUserToBlogPostsTable extends Migration
             if (env('DB_CONNECTION') === 'sqlite_test') {
                 $table->foreignId('user_id')->default(0)->constrained('users');
             } else {
-                $table->foreignId('user_id')->constrained('users');
+                $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             }
         });
     }

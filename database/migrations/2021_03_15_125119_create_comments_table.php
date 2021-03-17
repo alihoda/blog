@@ -22,7 +22,7 @@ class CreateCommentsTable extends Migration
             } else {
                 $table->text('content');
             }
-            $table->foreignId('blog_post_id')->constrained('blog_posts');
+            $table->foreignId('blog_post_id')->constrained('blog_posts')->onDelete('cascade');
         });
     }
 
