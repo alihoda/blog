@@ -13,7 +13,7 @@ class BlogPostFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->sentence(10),
+            'title' => $this->faker->sentence(5),
             'description' => $this->faker->paragraph(4, true)
         ];
     }
