@@ -16,20 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $test_user = User::factory()->testUser()->create();
-        $users = User::factory(10)->create();
-
-        $users = $users->concat([$test_user]);
-
-        $posts = BlogPost::factory(10)->make()->each(function ($post) use ($users) {
-            $post->user_id = $users->random()->id;
-            $post->save();
-        });
-
-        $comments = Comment::factory(100)->make()->each(function ($comment) use ($posts) {
-            $comment->blog_post_id = $posts->random()->id;
-            $comment->save();
-        });
+        $this->call([UserSeeder::class, BlogPostSeeder::class, CommentSeeder::class]);
 
     }
 }
