@@ -11,7 +11,7 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth')->except(['index', 'show']);
     }
     
     public function index()
@@ -43,12 +43,16 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = BlogPost::findOrFail($id);
+        $this->authorize('update', $post);
+
         return view('posts.edit', ['post' => $post]);
     }
 
     public function update(StorePost $request, $id)
     {
         $post = BlogPost::findOrFail($id);
+        $this->authorize('update', $post);
+
         $validateData = $request->validated();
         
         $post->fill($validateData);
@@ -60,9 +64,10 @@ class PostController extends Controller
     public function destroy(Request $request, $id)
     {
         $post = BlogPost::findOrFail($id);
+        $this->authorize('delete', $post);
         $post->delete();
 
         $request->session()->flash('status', 'Post successfully deleted!!');
-        return redirect()->route('posts.index');
+        return redirect()->route('home');
     }
 }
