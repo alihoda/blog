@@ -24,7 +24,6 @@
                         </span>
                         <span class="card-subtitle text-muted">{{ $post->user->name }}</span>
                     </div>
-
                 </div>
             </div>
         @empty
