@@ -22,7 +22,8 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'content' => $this->faker->sentence(5)
+            'content' => $this->faker->sentence(5),
+            'created_at' => $this->faker->dateTimeBetween('-3 months'),
         ];
     }
 }
