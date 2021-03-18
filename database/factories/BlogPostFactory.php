@@ -14,7 +14,14 @@ class BlogPostFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(5),
-            'description' => $this->faker->paragraph(4, true)
+            'description' => $this->faker->paragraph(4, true),
         ];
+    }
+
+    public function withUser($userId = null)
+    {
+        return $this->state([
+            'user_id' => $userId ?? $this->user()->id,
+        ]);
     }
 }

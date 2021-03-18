@@ -13,4 +13,9 @@ abstract class TestCase extends BaseTestCase
     {
         return User::factory()->create();
     }
+
+    protected function adminUser()
+    {
+        return User::factory()->userAdmin()->create();
+    }
 }

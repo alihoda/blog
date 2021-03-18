@@ -28,6 +28,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'is_admin' => false
         ];
     }
 
@@ -45,12 +46,13 @@ class UserFactory extends Factory
         });
     }
 
-    public function testUser()
+    public function userAdmin()
     {
         return $this->state(function (array $attributes) {
             return [
                 'name' => 'test',
-                'email' => 'test@test.com'
+                'email' => 'test@test.com',
+                'is_admin' => true
             ];
         });
     }

@@ -9,33 +9,40 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
+                {{-- card header --}}
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4>{{ $post->title }}</h4>
                     <span class="card-subtitle text-muted">Added {{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</span>
                 </div>
                 <div class="card-body">
+                    {{-- description --}}
                     <p>{{ $post->description }}</p>
                     <hr>
+                    {{-- comment section --}}
                     <ul class="list-group">
                         @forelse ($post->comment as $comment)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ $comment->content }}
-                                <span class="card-subtitle text-muted">Added {{ $comment->created_at->diffForHumans() }}</span>
+                            {{ $comment->content }}
+                            <span class="card-subtitle text-muted">Added {{ $comment->created_at->diffForHumans() }}</span>
                             </li>
-                            @empty
+                        @empty
                             <p>No comment yet!</p>
-                            @endforelse
-                        </div>    
-                    </ul> 
+                        @endforelse
+                    </ul>
+                </div>    
+                {{-- card footer --}}
                 <div class="card-footer d-flex justify-content-between align-items-center">
-                    <a class="btn btn-outline-primary" href="{{ route('posts.edit', ['post' => $post]) }}" role="button">Edit</a>
-                    <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger">Delete</button>
-                    </form>
+                    @can('update', $post)
+                        <a class="btn btn-outline-primary col-sm-2" href="{{ route('posts.edit', ['post' => $post]) }}" role="button">Edit</a>
+                    @endcan
+                    @can('delete', $post)
+                        <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger">Delete</button>
+                        </form>
+                    @endcan
                 </div>
-                
             </div>
         </div>
     </div>

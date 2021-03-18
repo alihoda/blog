@@ -50,14 +50,15 @@ class PostTest extends TestCase
 
     public function test_update()
     {
-        $post = BlogPost::factory()->create();
-
+        $user = $this->user();
+        $post = BlogPost::factory()->withUser($user->id)->create();
         $params = ['title' => 'edited title', 'description' => 'edited desc'];
-
-        $this->actingAs($this->user())
+        
+        $this->actingAs($user)
             ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
+
         $this->assertEquals(session('status'), 'Post successfully updated!!');
         $this->assertDatabaseMissing('blog_posts', $post->toArray());
         $this->assertDatabaseHas('blog_posts', ['title' => 'edited title']);
@@ -65,9 +66,10 @@ class PostTest extends TestCase
 
     public function test_delete()
     {
-        $post = BlogPost::factory()->create();
+        $user = $this->user();
+        $post = BlogPost::factory()->withUser($user->id)->create();
 
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
