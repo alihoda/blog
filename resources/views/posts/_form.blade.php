@@ -6,7 +6,8 @@
 </div>
 <div class="form-group">
   <label for="description">Descritpion</label>
-  <input type="text" name="description" id="description" class="form-control" value="{{ old('description', $post->description ?? null) }}">
+  
+  <textarea class="form-control" name="description" id="description" rows="5">{{ old('description', $post->description ?? null) }}</textarea>
 </div>
 
 @if ($errors->any())
