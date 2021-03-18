@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -50,5 +51,12 @@ class User extends Authenticatable
     public function scopeMostActiveUser($query)
     {
         return $this->withCount('blogPost')->orderBy('blog_post_count', 'desc');
+    }
+
+    public function scopeMostActiveLastMonth($query)
+    {
+        return $query->withCount(['blogPost' => function (Builder $query) {
+            return $query->whereBetween(static::CREATED_AT, [now()->subMonths(1), now()]);
+        }])->having('blog_post_count', '>=', 2)->orderBy('blog_post_count', 'desc');
     }
 }

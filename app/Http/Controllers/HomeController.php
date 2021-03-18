@@ -29,6 +29,7 @@ class HomeController extends Controller
             'posts' => BlogPost::latest()->withCount('comment')->get(),
             'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
             'mostActive' => User::mostActiveUser()->take(5)->get(),  
+            'mostActiveLastMonth' => User::mostActiveLastMonth()->take(5)->get(),
         ]);
     }
 

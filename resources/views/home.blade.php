@@ -71,6 +71,20 @@
                     @endforeach
                 </ul>
             </div>
+            {{-- the most active user in last month --}}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h4 class="card-title">Most Active User Last Month</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach ($mostActiveLastMonth as $user)
+                        <li class="list-group-item">
+                            {{ $user->name }}
+                            <span class="text-muted">({{ $user->blog_post_count }})</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
 </div>
