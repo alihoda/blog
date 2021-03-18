@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+
 use App\Models\BlogPost;
 use App\Http\Requests\StorePost;
 
@@ -16,7 +18,7 @@ class PostController extends Controller
     
     public function index()
     {
-        return view('posts.index', ['posts' => BlogPost::withCount('comment')->get()]);
+        return view('home', ['posts' => BlogPost::latest()->withCount('comment')->get()]);
     }
 
     public function create()
@@ -37,6 +39,11 @@ class PostController extends Controller
 
     public function show($id)
     {
+        // One way use scope for relational model
+        // return view('posts.show', ['post' => BlogPost::with(['comment' => function ($query) {
+        //     return $query->latest();
+        // }])->findOrFail($id)]);
+
         return view('posts.show', ['post' => BlogPost::with('comment')->findOrFail($id)]);
     }
 
