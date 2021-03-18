@@ -34,4 +34,9 @@ class BlogPost extends Model
     {
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
+
+    public function scopeMostCommented($query)
+    {
+        return $this->withCount('comment')->orderBy('comment_count', 'desc');
+    }
 }

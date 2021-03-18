@@ -18,7 +18,10 @@ class PostController extends Controller
     
     public function index()
     {
-        return view('home', ['posts' => BlogPost::latest()->withCount('comment')->get()]);
+        return view('home', [
+            'posts' => BlogPost::latest()->withCount('comment')->get(),
+            'mostCommented' => BlogPost::mostCommented()->take(5)->get(),    
+        ]);
     }
 
     public function create()

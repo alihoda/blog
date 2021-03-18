@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -24,7 +25,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home', ['posts' => BlogPost::withCount('comment')->get()]);
+        return view('home', [
+            'posts' => BlogPost::latest()->withCount('comment')->get(),
+            'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+            'mostActive' => User::mostActiveUser()->take(5)->get(),  
+        ]);
     }
 
     public function contact()

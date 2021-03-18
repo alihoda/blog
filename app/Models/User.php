@@ -45,4 +45,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(BlogPost::class);
     }
+
+    // Local scopes
+    public function scopeMostActiveUser($query)
+    {
+        return $this->withCount('blogPost')->orderBy('blog_post_count', 'desc');
+    }
 }
