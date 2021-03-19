@@ -12,7 +12,14 @@
                 {{-- card header --}}
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4>{{ $post->title }}</h4>
-                    <span class="card-subtitle text-muted">Added {{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</span>
+                    <div>
+                        <span class="card-subtitle text-muted">Added {{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</span>
+                        @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 20)
+                            @component('components.badge')
+                                New
+                            @endcomponent
+                        @endif
+                    </div>
                 </div>
                 <div class="card-body">
                     {{-- description --}}
