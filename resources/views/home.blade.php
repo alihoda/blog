@@ -42,6 +42,7 @@
         </div>
         <div class="col-3 p-2">
             {{-- the most commented posts --}}
+            {{-- <x-card title="Most Commented Posts" :items="collect($mostCommented)->pluck('title', 'comment_count')" /> --}}
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Most Commented Posts</h4>

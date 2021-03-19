@@ -13,12 +13,11 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4>{{ $post->title }}</h4>
                     <div>
-                        <span class="card-subtitle text-muted">Added {{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</span>
-                        @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 20)
-                            @component('components.badge')
-                                New
-                            @endcomponent
-                        @endif
+                        <x-added :date="$post->created_at" :name="$post->user->name"/>
+                        {{-- badge for new posts --}}
+                        <x-badge type="success" :show="now()->diffInMinutes($post->created_at) < 30">
+                            New
+                        </x-badge>
                     </div>
                 </div>
                 <div class="card-body">
