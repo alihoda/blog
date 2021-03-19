@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 use App\Models\BlogPost;
 use App\Http\Requests\StorePost;
@@ -13,7 +14,7 @@ class PostController extends Controller
 
     public function __construct()
     {
-        // $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
     
     public function index()
@@ -46,8 +47,12 @@ class PostController extends Controller
         // return view('posts.show', ['post' => BlogPost::with(['comment' => function ($query) {
         //     return $query->latest();
         // }])->findOrFail($id)]);
+        
+        $post = Cache::remember("blog-post-{$id}", now()->addSeconds(60), function () use ($id) {
+            return BlogPost::with('comment')->findOrFail($id);
+        });
 
-        return view('posts.show', ['post' => BlogPost::with('comment')->findOrFail($id)]);
+        return view('posts.show', ['post' => $post, 'counter' => $this->userCount($id)]);
     }
 
     public function edit($id)
@@ -79,5 +84,39 @@ class PostController extends Controller
 
         $request->session()->flash('status', 'Post successfully deleted!!');
         return redirect()->route('home');
+    }
+
+    private function userCount(int $id)
+    {
+        $sessionId = session()->getId();
+        $counterKey = "blog-post-{$id}-counter";
+        $userKey = "blog-post-{$id}-user";
+
+        $users = Cache::get($userKey, []);
+        $userUpdate = [];
+        $difference = 0;
+        $now = now();
+
+        foreach ($users as $session => $lastVisit) {
+            if ($now->diffInMinutes($lastVisit) >= 1) {
+                $difference--;
+            } else {
+                $userUpdate[$session] = $lastVisit;
+            }
+        }
+
+        if (!array_key_exists($sessionId, $users) || $now->diffInMinutes($users[$sessionId]) >= 1) {
+            $difference++;
+        }
+
+        $userUpdate[$sessionId] = $now;
+        
+        Cache::forever($userKey, $userUpdate);
+        if (!Cache::has($counterKey)) {
+            Cache::forever($counterKey, 1);
+        } else {
+            Cache::increment($counterKey, $difference);
+        }
+        return Cache::get($counterKey);
     }
 }

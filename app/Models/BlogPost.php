@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 use App\Scopes\LatestScope;
 
@@ -28,6 +29,14 @@ class BlogPost extends Model
     // {
     //     static::addGlobalScope(new LatestScope);
     // }
+
+    protected static function booted()
+    {
+        // Remove cached key if data changed
+        static::updated(function ($blogPost) {
+            Cache::forget("blog-post-{$blogPost->id}");
+        });
+    }
 
     // Local Scope
     public function scopeLatest($query)

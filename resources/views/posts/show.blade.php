@@ -7,7 +7,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
                 {{-- card header --}}
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -23,6 +23,7 @@
                 <div class="card-body">
                     {{-- description --}}
                     <p>{{ $post->description }}</p>
+                    <p class="text-muted">Read by {{ $counter }} people</p>
                     <hr>
                     {{-- comment section --}}
                     <ul class="list-group">
@@ -37,18 +38,20 @@
                     </ul>
                 </div>    
                 {{-- card footer --}}
-                <div class="card-footer d-flex justify-content-between align-items-center">
-                    @can('update', $post)
-                        <a class="btn btn-outline-primary col-sm-2" href="{{ route('posts.edit', ['post' => $post]) }}" role="button">Edit</a>
-                    @endcan
-                    @can('delete', $post)
-                        <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger">Delete</button>
-                        </form>
-                    @endcan
-                </div>
+                @auth
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        @can('update', $post)
+                            <a class="btn btn-outline-primary col-sm-2" href="{{ route('posts.edit', ['post' => $post]) }}" role="button">Edit</a>
+                        @endcan
+                        @can('delete', $post)
+                            <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </form>
+                        @endcan
+                    </div>
+                @endauth
             </div>
         </div>
     </div>
