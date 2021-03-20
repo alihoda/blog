@@ -23,7 +23,10 @@
                 <div class="card-body">
                     {{-- description --}}
                     <p>{{ $post->description }}</p>
-                    <p class="text-muted">Read by {{ $counter }} people</p>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Read by {{ $counter }} people</span>
+                        <span><x-tags :tags="$post->tags" /></span>
+                    </div>
                     <hr>
                     {{-- comment section --}}
                     <ul class="list-group">
