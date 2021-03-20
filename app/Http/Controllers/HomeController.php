@@ -43,7 +43,7 @@ class HomeController extends Controller
         return view('home', [
             'posts' => BlogPost::latest()->withCount('comment')->with('user')->get(),
             'mostCommented' => $mostCommented,
-            'mostActive' => $mostActive,  
+            'mostActive' => $mostActive,
             'mostActiveLastMonth' => $mostActiveLastMonth,
         ]);
     }

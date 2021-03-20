@@ -16,12 +16,12 @@ class PostController extends Controller
     {
         $this->middleware('auth')->except(['index', 'show']);
     }
-    
+
     public function index()
     {
         return view('home', [
             'posts' => BlogPost::latest()->withCount('comment')->get(),
-            'mostCommented' => BlogPost::mostCommented()->take(5)->get(),    
+            'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
         ]);
     }
 
@@ -47,7 +47,7 @@ class PostController extends Controller
         // return view('posts.show', ['post' => BlogPost::with(['comment' => function ($query) {
         //     return $query->latest();
         // }])->findOrFail($id)]);
-        
+
         $post = Cache::tags(['blog-post'])->remember("blog-post-{$id}", now()->addSeconds(60), function () use ($id) {
             return BlogPost::with('comment')->findOrFail($id);
         });
@@ -69,7 +69,7 @@ class PostController extends Controller
         $this->authorize('update', $post);
 
         $validateData = $request->validated();
-        
+
         $post->fill($validateData);
         $post->save();
         $request->session()->flash('status', 'Post successfully updated!!');
@@ -98,7 +98,7 @@ class PostController extends Controller
         $now = now();
 
         foreach ($users as $session => $lastVisit) {
-            if ($now->d iffInMinutes($lastVisit) >= 1) {
+            if ($now->diffInMinutes($lastVisit) >= 1) {
                 $difference--;
             } else {
                 $userUpdate[$session] = $lastVisit;
@@ -110,7 +110,7 @@ class PostController extends Controller
         }
 
         $userUpdate[$sessionId] = $now;
-        
+
         Cache::tags(['blog-post'])->forever($userKey, $userUpdate);
         if (!Cache::tags(['blog-post'])->has($counterKey)) {
             Cache::tags(['blog-post'])->forever($counterKey, 1);
