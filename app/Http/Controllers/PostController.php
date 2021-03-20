@@ -49,7 +49,7 @@ class PostController extends Controller
         // }])->findOrFail($id)]);
 
         $post = Cache::tags(['blog-post'])->remember("blog-post-{$id}", now()->addSeconds(60), function () use ($id) {
-            return BlogPost::with('comment')->findOrFail($id);
+            return BlogPost::with('comment')->with('tags')->with('user')->findOrFail($id);
         });
 
         return view('posts.show', ['post' => $post, 'counter' => $this->userCount($id)]);

@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
-use App\Scopes\LatestScope;
-
 class BlogPost extends Model
 {
     use HasFactory;
@@ -22,6 +20,11 @@ class BlogPost extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps()->as('tagged');
     }
 
     // Global Scope
