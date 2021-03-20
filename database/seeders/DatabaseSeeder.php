@@ -25,7 +25,12 @@ class DatabaseSeeder extends Seeder
 
         Cache::tags(['blog-post'])->flush();
 
-        $this->call([UserSeeder::class, BlogPostSeeder::class, CommentSeeder::class]);
-
+        $this->call([
+            UserSeeder::class,
+            BlogPostSeeder::class,
+            CommentSeeder::class,
+            TagSeeder::class,
+            BlogPostTagSeeder::class,
+        ]);
     }
 }
