@@ -25,7 +25,8 @@ class StorePost extends FormRequest
     {
         return [
             'title' => 'bail | required | max:100 | min:5',
-            'description' => 'bail | required | min:10'
+            'description' => 'bail | required | min:10',
+            'thumbnail' => 'image | mimes:jpg, jpeg, png | max:1024',
         ];
     }
 }
