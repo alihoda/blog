@@ -30,6 +30,7 @@ Blog
                     </div>
                     <hr>
                     {{-- comment section --}}
+                    @include('comments._form')
                     <ul class="list-group">
                         @forelse ($post->comment as $comment)
                         <li class="list-group-item d-flex justify-content-between align-items-center">

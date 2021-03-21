@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/contact', 'HomeController@contact')->name('contact');
 Route::get('/', 'HomeController@index')->name('home');
-Route::resource('/posts', 'PostController');
 Route::get('/posts/tags/{tag}', 'BlogPostTagController@index')->name('post-tags');
+
+Route::resource('posts', 'PostController');
+Route::resource('posts.comments', 'PostCommentController')->only(['store']);
 
 Auth::routes();
