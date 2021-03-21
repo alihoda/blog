@@ -10,6 +10,10 @@ class BlogPostTagController extends Controller
     {
         $tag = Tag::findOrFail($tag);
 
-        return view('home', ['posts' => $tag->blogPosts]);
+        return view('home', [
+            'posts' => $tag->blogPosts()
+                ->latestWithRelation()
+                ->get(),
+        ]);
     }
 }

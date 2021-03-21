@@ -12,6 +12,15 @@ class BlogPost extends Model
 
     protected $fillable = ['title', 'description', 'user_id'];
 
+    protected static function booted()
+    {
+        // Remove cached key if data changed
+        static::updated(function ($blogPost) {
+            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
+        });
+    }
+
+    // Relations
     public function comment()
     {
         return $this->hasMany(Comment::class)->latest();
@@ -27,20 +36,6 @@ class BlogPost extends Model
         return $this->belongsToMany(Tag::class)->withTimestamps()->as('tagged');
     }
 
-    // Global Scope
-    // protected static function booted()
-    // {
-    //     static::addGlobalScope(new LatestScope);
-    // }
-
-    protected static function booted()
-    {
-        // Remove cached key if data changed
-        static::updated(function ($blogPost) {
-            Cache::forget("blog-post-{$blogPost->id}");
-        });
-    }
-
     // Local Scope
     public function scopeLatest($query)
     {
@@ -49,6 +44,11 @@ class BlogPost extends Model
 
     public function scopeMostCommented($query)
     {
-        return $this->withCount('comment')->orderBy('comment_count', 'desc');
+        return $query->withCount('comment')->orderBy('comment_count', 'desc');
+    }
+
+    public function scopeLatestWithRelation($query)
+    {
+        return $query->latest()->withCount('comment')->with('user', 'tags');
     }
 }
