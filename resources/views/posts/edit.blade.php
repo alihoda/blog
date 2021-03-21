@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Edit
+Edit
 @endsection
 
 @section('content')
@@ -10,9 +10,10 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">Edit Post</a></div>
-                
+
                 <div class="card-body">
-                    <form action="{{ route('posts.update', ['post' => $post->id]) }}" method="post">
+                    <form action="{{ route('posts.update', ['post' => $post->id]) }}" method="post"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         @include('posts._form')

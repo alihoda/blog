@@ -7,7 +7,7 @@ Blog
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-8">
             <div class="card">
                 {{-- card header --}}
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -59,6 +59,13 @@ Blog
                 </div>
                 @endauth
             </div>
+        </div>
+        <div class="col-md-4">
+            @if ($post->image)
+            <div class="card">
+                <img class="card-img-top" src="{{ $post->image->url() }}">
+            </div>
+            @endif
         </div>
     </div>
 </div>

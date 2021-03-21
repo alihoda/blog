@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Cache;
 
 use App\Models\BlogPost;
 use App\Http\Requests\StorePost;
+use App\Models\Image;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -35,6 +37,14 @@ class PostController extends Controller
         $validateData = $request->validated();
         $validateData['user_id'] = $request->user()->id;
         $blogPost = BlogPost::create($validateData);
+
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+            $blogPost->image()->save(Image::create(['path' => $path]));
+
+            // $file->getClientOriginalExtension();    // Get file extension
+            // $file->storeAs('thumbnails', $blogPost->id . $file->guessExtension());   // Store file with custom name
+        }
 
         $request->session()->flash('status', 'Post successfully created !!');
 
@@ -69,10 +79,22 @@ class PostController extends Controller
         $this->authorize('update', $post);
 
         $validateData = $request->validated();
-
         $post->fill($validateData);
+
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+            if ($post->image) {
+                Storage::delete($post->image->path);
+                $post->image->path = $path;
+                $post->image->save();
+            } else {
+                $post->image()->save(Image::create(['path' => $path]));
+            }
+        }
+
         $post->save();
         $request->session()->flash('status', 'Post successfully updated!!');
+
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
