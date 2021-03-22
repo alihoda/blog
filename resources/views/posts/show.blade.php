@@ -30,17 +30,8 @@ Blog
                     </div>
                     <hr>
                     {{-- comment section --}}
-                    @include('comments._form')
-                    <ul class="list-group">
-                        @forelse ($post->comment as $comment)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ $comment->content }}
-                            <x-added :date="$comment->created_at" :name="$comment->user->name" />
-                        </li>
-                        @empty
-                        <p>No comment yet!</p>
-                        @endforelse
-                    </ul>
+                    <x-comment-form :route="route('posts.comments.store', ['post' => $post->id])" />
+                    <x-comment-list :comments="$post->comment" />
                 </div>
                 {{-- card footer --}}
                 @auth

@@ -25,5 +25,19 @@
             </div>
         </div>
     </div>
+
+    {{-- comment section --}}
+    <div class="row">
+        <div class="col-md-12 d-flex p-2">
+            <div class="card flex-fill">
+                <div class="card-body">
+                    <h4 class="card-title">Commets</h4>
+                    <x-comment-form :route="route('users.comments.store', ['user' => $user->id])" />
+                    <x-comment-list :comments="$user->commentsOn" />
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection
