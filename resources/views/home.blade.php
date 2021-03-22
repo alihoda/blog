@@ -12,7 +12,7 @@ Home
             <div class="row justify-content-start">
                 @forelse ($posts as $post)
                 <div class="col-md-4 d-flex p-2">
-                    <div class="card">
+                    <div class="card flex-fill">
                         <div class="card-header">
                             <a href="{{ route('posts.show', ['post' => $post->id]) }}" style="color: black;">
                                 {{ $post->title }}
@@ -23,7 +23,7 @@ Home
                             <p>{{ $post->description }}</p>
                         </div>
                         {{-- tags --}}
-                        <div class="card-body d-flex d-flex align-items-end">
+                        <div class="card-body d-flex align-items-end">
                             <x-tags :tags="$post->tags" />
                         </div>
                         {{-- card footer --}}
