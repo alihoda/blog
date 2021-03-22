@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\View\Composers\ActivityComposer;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 
@@ -27,7 +28,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Blade::component('card', Card::class);
+        Schema::defaultStringLength(191);
+
         // Composers
         View::composer('home', ActivityComposer::class);
     }

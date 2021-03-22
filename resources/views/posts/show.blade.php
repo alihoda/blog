@@ -13,7 +13,7 @@ Blog
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4>{{ $post->title }}</h4>
                     <div>
-                        <x-added :date="$post->created_at" :name="$post->user->name" />
+                        <x-added :date="$post->created_at" :name="$post->user->name" :userId="$post->user->id"/>
                         {{-- badge for new posts --}}
                         <x-badge type="success" :show="now()->diffInMinutes($post->created_at) < 30">
                             New
@@ -60,13 +60,13 @@ Blog
                 @endauth
             </div>
         </div>
-        <div class="col-md-4">
-            @if ($post->image)
-            <div class="card">
-                <img class="card-img-top" src="{{ $post->image->url() }}">
+        @if ($post->image)
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img" src="{{ $post->image->url() }}">
+                </div>
             </div>
-            @endif
-        </div>
+        @endif
     </div>
 </div>
 @endsection
