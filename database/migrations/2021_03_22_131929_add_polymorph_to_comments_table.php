@@ -29,7 +29,7 @@ class AddPolymorphToCommentsTable extends Migration
     {
         Schema::table('comments', function (Blueprint $table) {
             $table->dropMorphs('commentable');
-            $table->foreignId('blog_post_id')->constrained()->onDelete('cascade');
+            $table->foreignId('blog_post_id')->nullable()->constrained()->onDelete('cascade');
         });
     }
 }
