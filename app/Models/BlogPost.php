@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 class BlogPost extends Model
 {
-    use HasFactory;
+    use HasFactory, Taggable;
 
     protected $fillable = ['title', 'description', 'user_id'];
 
@@ -29,11 +30,6 @@ class BlogPost extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
     }
 
     public function image()
