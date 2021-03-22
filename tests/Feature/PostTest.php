@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\BlogPost;
 use App\Models\Comment;
@@ -15,9 +14,10 @@ class PostTest extends TestCase
 
     public function test_createPost()
     {
-        $post = BlogPost::factory()->create();
+        $user = $this->user();
+        $post = BlogPost::factory()->withUser($user->id)->create();
 
-        $response = $this->actingAs($this->user())->get('/posts');
+        $response = $this->actingAs($user)->get('/posts');
         $response->assertSeeText($post->title);
         $this->assertDatabaseHas('blog_posts', ['title' => $post->title]);
     }
@@ -41,7 +41,7 @@ class PostTest extends TestCase
             ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
-        
+
         $messages = session('errors')->getMessages();
 
         $this->assertEquals($messages['title'][0], 'The title must be at least 5 characters.');
@@ -53,7 +53,7 @@ class PostTest extends TestCase
         $user = $this->user();
         $post = BlogPost::factory()->withUser($user->id)->create();
         $params = ['title' => 'edited title', 'description' => 'edited desc'];
-        
+
         $this->actingAs($user)
             ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
@@ -73,16 +73,16 @@ class PostTest extends TestCase
             ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
-            $this->assertEquals(session('status'), 'Post successfully deleted!!');
-            $this->assertDatabaseMissing('blog_posts', $post->toArray());
+        $this->assertEquals(session('status'), 'Post successfully deleted!!');
+        $this->assertDatabaseMissing('blog_posts', $post->toArray());
     }
 
     public function test_comment()
     {
-        $post = BlogPost::factory()
-            ->has(Comment::factory()->count(5))
-            ->create();
-        $response = $this->actingAs($this->user())->get('/posts');
+        $user = $this->user();
+        $post = BlogPost::factory()->withUser($user->id)->create();
+        $comments = Comment::factory()->commentable($post->id)->count(5);
+        $response = $this->actingAs($user)->get('/posts');
         $response->assertSeeText('5 comments');
     }
 }

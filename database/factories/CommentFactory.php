@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\BlogPost;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,5 +26,13 @@ class CommentFactory extends Factory
             'content' => $this->faker->sentence(5),
             'created_at' => $this->faker->dateTimeBetween('-3 months'),
         ];
+    }
+
+    public function commentable($postId)
+    {
+        return $this->state([
+            'commentable_id' => $postId,
+            'commentable_type' => BlogPost::class,
+        ]);
     }
 }
