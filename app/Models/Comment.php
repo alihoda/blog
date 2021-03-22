@@ -33,11 +33,10 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Global Scope
-    // protected static function booted()
-    // {
-    //     static::addGlobalScope(new LatestScope);
-    // }
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
+    }
 
     // Local Scope
     public function scopeLatest(Builder $query)
