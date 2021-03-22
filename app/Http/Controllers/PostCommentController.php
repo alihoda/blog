@@ -19,7 +19,6 @@ class PostCommentController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        $request->session()->flash('status', 'Comment added successfully!');
-        return redirect()->back();
+        return redirect()->back()->withStatus('Comment added successfully!');
     }
 }
