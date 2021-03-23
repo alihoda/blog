@@ -13,14 +13,6 @@ class BlogPost extends Model
 
     protected $fillable = ['title', 'description', 'user_id'];
 
-    protected static function booted()
-    {
-        // Remove cached key if data changed
-        static::updated(function ($blogPost) {
-            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
-        });
-    }
-
     // Relations
     public function comment()
     {

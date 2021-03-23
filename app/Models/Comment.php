@@ -14,16 +14,6 @@ class Comment extends Model
 
     protected $fillable = ['content', 'user_id'];
 
-    public static function booted()
-    {
-        static::created(function (Comment $comment) {
-            if ($comment->commentable_type === BlogPost::class) {
-                Cache::tags(['blog-post'])->forget("blog-post-{$comment->commentable_id}");
-                Cache::tags(['blog-post'])->forget('mostCommented');
-            }
-        });
-    }
-
     public function commentable()
     {
         return $this->morphTo();
