@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CounterContract;
 use App\Events\BlogPostPosted;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 
 use App\Models\BlogPost;
@@ -15,9 +15,12 @@ use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
 
-    public function __construct()
+    private $counter;
+
+    public function __construct(CounterContract $counter)
     {
         $this->middleware('auth')->except(['index', 'show']);
+        $this->counter = $counter;
     }
 
     public function index()
@@ -57,7 +60,12 @@ class PostController extends Controller
             return BlogPost::with('comment', 'tags', 'user', 'comment.user')->findOrFail($id);
         });
 
-        return view('posts.show', ['post' => $post, 'counter' => $this->userCount($id)]);
+        // $counter = resolve(Counter::class);
+
+        return view('posts.show', [
+            'post' => $post,
+            'counter' => $this->counter->increment("blog-post-{$id}", ['blog-post'])
+        ]);
     }
 
     public function edit($id)
