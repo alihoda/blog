@@ -9,9 +9,11 @@ use App\Models\Comment;
 use App\Observers\BlogPostObserver;
 use App\Observers\CommentObserver;
 use App\Services\Counter;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use phpDocumentor\Reflection\Types\Resource_;
 
 // use App\View\Components\Card;
 
@@ -54,5 +56,7 @@ class AppServiceProvider extends ServiceProvider
             CounterContract::class,
             Counter::class
         );
+
+        JsonResource::withoutWrapping();
     }
 }
