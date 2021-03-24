@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -81,5 +80,10 @@ class User extends Authenticatable
             return $query->where('commentable_id', '=', $post->id)
                 ->where('commentable_type', '=', BlogPost::class);
         });
+    }
+
+    public function scopeThatIsAdmin($query)
+    {
+        return $query->where('is_admin', true);
     }
 }

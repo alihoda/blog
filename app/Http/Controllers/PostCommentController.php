@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentPosted;
 use App\Http\Requests\StoreComment;
 use App\Jobs\NotifyUserPostWasCommented;
 use App\Jobs\ThrottledMail;
@@ -22,12 +23,7 @@ class PostCommentController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        // Mail::to($post->user)->send(new CommentPostedMarkdown($comment));
-
-        ThrottledMail::dispatch(new CommentPostedMarkdown($comment), $post->user);
-
-        NotifyUserPostWasCommented::dispatch($comment);
-
+        event(new CommentPosted($comment));
 
         return redirect()->back()->withStatus('Comment added successfully!');
     }

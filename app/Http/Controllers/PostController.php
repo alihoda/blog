@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BlogPostPosted;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
@@ -41,10 +42,9 @@ class PostController extends Controller
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('thumbnails');
             $blogPost->image()->save(Image::make(['path' => $path]));
-
-            // $file->getClientOriginalExtension();    // Get file extension
-            // $file->storeAs('thumbnails', $blogPost->id . $file->guessExtension());   // Store file with custom name
         }
+
+        event(new BlogPostPosted($blogPost));
 
         $request->session()->flash('status', 'Post successfully created !!');
 
@@ -53,11 +53,6 @@ class PostController extends Controller
 
     public function show($id)
     {
-        // One way use scope for relational model
-        // return view('posts.show', ['post' => BlogPost::with(['comment' => function ($query) {
-        //     return $query->latest();
-        // }])->findOrFail($id)]);
-
         $post = Cache::tags(['blog-post'])->remember("blog-post-{$id}", now()->addSeconds(60), function () use ($id) {
             return BlogPost::with('comment', 'tags', 'user', 'comment.user')->findOrFail($id);
         });
