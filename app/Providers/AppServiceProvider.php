@@ -6,14 +6,15 @@ use App\Contracts\CounterContract;
 use App\Http\View\Composers\ActivityComposer;
 use App\Models\BlogPost;
 use App\Models\Comment;
+use App\Models\User;
 use App\Observers\BlogPostObserver;
 use App\Observers\CommentObserver;
+use App\Observers\UserObserver;
 use App\Services\Counter;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
-use phpDocumentor\Reflection\Types\Resource_;
 
 // use App\View\Components\Card;
 
@@ -41,8 +42,10 @@ class AppServiceProvider extends ServiceProvider
         // Composers
         View::composer('home', ActivityComposer::class);
 
+        // Observers
         BlogPost::observe(BlogPostObserver::class);
         Comment::observe(CommentObserver::class);
+        User::observe(UserObserver::class);
 
         $this->app->singleton(Counter::class, function ($app) {
             return new Counter(

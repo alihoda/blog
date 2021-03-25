@@ -32,14 +32,18 @@ class RenameBlogPostTagTableToTaggables extends Migration
      */
     public function down()
     {
-        Schema::table('blog_post_tag', function (Blueprint $table) {
+        Schema::table('taggables', function (Blueprint $table) {
             $table->dropMorphs('taggable');
         });
 
         Schema::rename('taggables', 'blog_post_tag');
 
+        Schema::disableForeignKeyConstraints();
+
         Schema::table('blog_post_tag', function (Blueprint $table) {
             $table->foreignId('blog_post_id')->constrained('blog_post_tag')->onDelete('cascade');
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 }
